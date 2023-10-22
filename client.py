@@ -3,10 +3,11 @@ import json
 
 # server_address = str(input("Enter the server address:"))
 server_address = "127.0.0.1"
+port = 12345
 
 # Inicialização do socket UDP
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-client_socket.sendto("register".encode(), (server_address, 12345))
+client_socket.sendto("register".encode(), (server_address, port))
 
 lost_packets = 0 # Número de pacotes perdidos
 out_of_order = 0 # Número de pacotes fora de ordem
@@ -40,11 +41,12 @@ try:
             lost_packets += (current_order - last_received - 1)
         
         # Implementar alguma operação nos dados recebidos
-        print(f"(client) Received: {message_dict} from {address}") 
-        # Dados de streaming
-        print(f"(client) number of packets received: {received_packets}")
-        print(f"(client) number of lost packets: {lost_packets}")
-        print(f"(client) number of packets out of order: {out_of_order}\n")
+        print(f"(client) Received message: {message_dict} from {address}") 
+        # Dados estatística de streaming
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        print(f"(client) Number of packets received: {received_packets}")
+        print(f"(client) Number of lost packets: {lost_packets}")
+        print(f"(client) Number of packets out of order: {out_of_order}\n")
         
         # Atualize o último pacote recebido
         last_received = current_order
