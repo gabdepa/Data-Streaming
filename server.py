@@ -8,9 +8,9 @@ port = 12345
 # Função para enviar mensagem para um cliente
 def send_message_to_client(event, client_address, server_socket):
     print(f"(server) Sending message to client {client_address}")
-    message = {"count": count, "content": f"Message => {i}"}  # Crie um dicionário para a mensagem
-    event.wait()  # Espera pelo sinal para enviar a mensagem
+    message = {"count": count, "content": i}  # Crie um dicionário para a mensagem
     json_message = json.dumps({"message": message})  # Converta o dicionário para uma string JSON
+    event.wait()  # Espera pelo sinal para enviar a mensagem
     server_socket.sendto(json_message.encode(), client_address)  # Codifique a string JSON antes de enviar
  
 
@@ -32,7 +32,7 @@ while True:
     try:
         # Recebe mensagem e endereço do socket
         message, address = server_socket.recvfrom(1024)
-        print(f"(server) Received {message} of address {address} on socket")
+        print(f"\n(server) Received {message} of address {address} on socket")
 
         # Registra o cliente no conjunto de clientes
         if message.decode() == "register":
