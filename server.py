@@ -5,12 +5,12 @@ import json
 
 port = 12345
 
-# Função para enviar mensagem para um cliente
+# Enviar mensagem para um cliente
 def send_message_to_client(event, client_address, server_socket):
     print(f"(server) Sending message to client {client_address}")
-    # Crie um dicionário para a mensagem
+    # Cria um dicionário para a mensagem
     message = {"count": count, "content": i}  
-    # Converta o dicionário para uma string JSON
+    # Converte o dicionário para uma string JSON
     json_message = json.dumps({"message": message})  
     # Espera pelo sinal para enviar a mensagem
     event.wait()  
@@ -50,7 +50,7 @@ while True:
         print(f"(server) Number of clients registered: {len(clients)}\n")
 
     except BlockingIOError:
-        # Sem dados para ler, então faça outras coisas
+        # Sem dados para ler continua enviando dados
         pass
 
     # Preparação para enviar o mesmo pacote para todos os clientes ao mesmo tempo
