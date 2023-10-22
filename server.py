@@ -1,11 +1,13 @@
 import socket
 import time
 import threading
+import json 
 
 # Função para enviar mensagem para um cliente
 def send_message_to_client(event, client_address, message, server_socket):
     event.wait()  # Espera pelo sinal para enviar a mensagem
-    server_socket.sendto(message.encode(), client_address)
+    json_message = json.dumps({"message": message})  # Converta o dicionário para uma string JSON
+    server_socket.sendto(json_message.encode(), client_address)  # Codifique a string JSON antes de enviar
 
 # Inicialize o socket UDP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -34,8 +36,10 @@ while True:
     # Preparação para enviar o mesmo pacote para todos os clientes ao mesmo tempo
     event = threading.Event()
     threads = []
+    message_dict = {"count": i, "content": f"Message {i}"}  # Crie um dicionário para a mensagem
+
     for client in clients:
-        thread = threading.Thread(target=send_message_to_client, args=(event, client, f"Message {i}", server_socket))
+        thread = threading.Thread(target=send_message_to_client, args=(event, client, message_dict, server_socket))
         threads.append(thread)
         thread.start()
 
