@@ -42,7 +42,7 @@ try:
         
         # Implementar alguma operação nos dados recebidos
         print(f"(client) Received message: {message_dict} from {address}") 
-        # Dados estatística de streaming
+        # Dados de estatística de streaming
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         print(f"(client) Number of packets received: {received_packets}")
         print(f"(client) Number of lost packets: {lost_packets}")
