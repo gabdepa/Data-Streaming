@@ -1,6 +1,26 @@
 import socket
 import json
 
+tiposEventos = [
+    'gol',
+    'perdeu_o_gol',
+    'defesa',
+    'drible',
+    'falta',
+    'cartão_amarelo',
+    'cartão_vermelho',
+    'pênalti'
+]
+contagem_tipos_eventos = {}
+
+def contabilizar_tipos_de_eventos(type):
+    contagem_tipos_eventos = {}
+        
+    if type in contagem_tipos_eventos:
+        contagem_tipos_eventos[type] += 1
+    else:
+        contagem_tipos_eventos[type] = 1
+
 server_address = "127.0.0.1"
 # server_address = str(input("Enter the server address:"))
 port = 12345
@@ -47,12 +67,10 @@ try:
         
         # Implementar alguma operação nos dados recebidos......
         print(f"(client) Received message: {message_dict} from {address}") 
-        
-        # Dados de estatística de streaming
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-        print(f"(client) Number of packets received: {received_packets}")
-        print(f"(client) Number of lost packets: {lost_packets}")
-        print(f"(client) Number of packets out of order: {out_of_order}\n")
+        # print(f"(client) Message type: {message_dict['message']['type']} ")         
+
+        # contabilizar_tipos_de_eventos(type=message_dict['message']['type'])
+        # print(contagem_tipos_eventos)
         
         # Atualiza o último pacote recebido
         last_received = current_order
@@ -62,3 +80,11 @@ except KeyboardInterrupt:
     print("\n(client) Ctrl+C received. Unregistering client.")
     # Envia mensagem de cancelamento de registro ao servidor
     client_socket.sendto("unregister".encode(), (server_address, port))
+
+    # Dados de estatística de streaming
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    print(f"(client) Number of packets received: {received_packets}")
+    print(f"(client) Number of lost packets: {lost_packets}")
+    print(f"(client) Number of packets out of order: {out_of_order}\n")
+
+

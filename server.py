@@ -18,6 +18,13 @@ class Goleiro:
         self.nome = nome
         self.equipe = equipe
 
+class Mensagem:
+    def __init__(self, count, score,content,type):
+        self.count = count
+        self.score = score
+        self.content = content
+        self.type = type
+
 time_casa = "Time A"
 time_visitante = "Time B"
 
@@ -94,8 +101,6 @@ distribuicao_probabilidade = {
 jogo_simulado = []  # Lista para armazenar o placar e a frase de cada evento
 
 def simular_partida():
-
-
     # Lista de jogadores que não são goleiros
     jogadores_casa = [Jogador("Neymar", time_casa), Jogador("Messi", time_casa), Jogador("Ronaldo", time_casa), Jogador("Maradona", time_casa), Jogador("Zico", time_casa)]
     jogadores_visitante = [Jogador("Pelé", time_visitante), Jogador("Beckenbauer", time_visitante), Jogador("Cruyff", time_visitante), Jogador("Ronaldinho", time_visitante), Jogador("Iniesta", time_visitante)]
@@ -183,12 +188,12 @@ def simular_partida():
 simular_partida()
 
 
-
 # Enviar mensagem para um cliente
 def send_message_to_client(event, client_address, server_socket):
     print(f"(server) Sending message to client {client_address}")
     # Cria um dicionário para a mensagem
-    message = {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2]} # added type to datagram, which is the type of the event of the stream   
+    # message = pickle.dumps(Mensagem(count,jogo_simulado[count][0], jogo_simulado[count][1],jogo_simulado[count][2]) )
+    message= {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2]} # added type to datagram, which is the type of the event of the stream   
     # Converte o dicionário para uma string JSON
     json_message = json.dumps({"message": message })  
     # Espera pelo sinal para enviar a mensagem
@@ -196,7 +201,7 @@ def send_message_to_client(event, client_address, server_socket):
     # Codifica a string JSON antes de enviar via socket
     server_socket.sendto(json_message.encode(), client_address)  
  
-user_input = input("Insira o tempo entre os envios de notificações")
+user_input = input("Insira o tempo entre os envios de notificações: ")
 sleepTime = int(user_input)
 # Inicialização do socket UDP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -245,6 +250,9 @@ while True:
         threads.append(thread)
         # Thread começa a rodar   
         thread.start()
+    
+    # Intervalo de tempo entre cada mensagem 
+    time.sleep(sleepTime)  
 
     # Dispara o sinal para todos as threads enviarem a mensagem
     event.set()  
@@ -253,7 +261,6 @@ while True:
     for thread in threads:
         thread.join()
 
-    # Intervalo de tempo entre cada mensagem 
-    time.sleep(sleepTime)  
+    
     i += 1
     count += 1
