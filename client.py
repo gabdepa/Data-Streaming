@@ -69,8 +69,8 @@ try:
         print(f"(client) Received message: {message_dict} from {address}") 
         # print(f"(client) Message type: {message_dict['message']['type']} ")         
 
-        # contabilizar_tipos_de_eventos(type=message_dict['message']['type'])
-        # print(contagem_tipos_eventos)
+        print(message_dict['message']['content'])
+        print(message_dict['message']['score'])
         
         # Atualiza o último pacote recebido
         last_received = current_order

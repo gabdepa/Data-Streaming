@@ -1,0 +1,53 @@
+<h1>Data-Streaming Service</h1>
+<h2>Project Overview</h2>
+<p>In this endeavor, we have implemented a robust streaming server demonstrating the ubiquitous application of streaming services in contemporary digital ecosystems such as Netflix, stock exchange platforms, and meteorological forecast streaming.
+Project Implementation</p>
+<ul>
+<li>
+<p><strong>Stream Nature</strong>: Our team elected to focus on a multimedia stream, encapsulating a sequence of messages, each bearing a distinct type and at least two specific fields. A crucial field is the packet order in the stream, initiating from 1.</p>
+</li>
+<li>
+<p><strong>Command Line Configuration</strong>: A feature enabling the configuration of the time interval for message transmission in the stream via command line has been successfully integrated.</p>
+</li>
+<li>
+<p><strong>Client-Server Interaction</strong>: Multiple clients can register with the server to receive the stream, facilitated through UDP/IP. Upon termination, each client generates statistics on UDP usage, including packet loss and out-of-order packet arrival.</p>
+</li>
+</ul>
+<p><img src="statistics.png" alt="Statistics"></p>
+<ul>
+<li><strong>Data Operation</strong>: Each client implements an operation on the received data. In our scenario, it´s showed to the client the game event phrase and the score after the event such as showed below.</li>
+</ul>
+<p><img src="data_operation.png" alt="Data operation"></p>
+<ul>
+<li><strong>Execution Logs</strong>: Logs for multiple executions have been documented, with one mandatory execution involving three clients receiving the stream.</li>
+</ul>
+<h2>Code Structure</h2>
+<ul>
+<li>
+<p><strong>server.py</strong>: This file encapsulates the core functionality of the streaming server, handling client registrations, message streaming, and ensuring the seamless transmission of packets to registered clients.</p>
+</li>
+<li>
+<p><strong>client.py</strong>: This script represents the client-side logic, handling server communication, data reception, operation implementation on the received data, and generating UDP usage statistics upon client termination.</p>
+</li>
+<li>
+<p><strong>simulate_game.py</strong>: Simulate an soccer game using random choices lib, based on soccer Apps notifications, we use the random lib to choose between the possible events from the game, using random soccers phrases based on the event.</p>
+</li>
+</ul>
+<h2>Datagram Structure</h2>
+<p>For this project we choosed to use an JSON structure, using the fields:</p>
+<ul>
+<li><em>count</em>: Show the message sequence, used to the statistics for the client, such that the first count from a messsage that a client receives is his initial message for the missed datagram count.</li>
+<li><em>score</em> : Game score, since it is updated acording to the passed events.</li>
+<li><em>content</em> : Payload from the datagram, having the phrase from the event.</li>
+<li><em>type</em> : Event type of the message, one of (Foul,Goal, Red card, yellow card)</li>
+</ul>
+<pre><code>message= {
+   &quot;count&quot;: Integer, 
+   &quot;score&quot;: String,
+   &quot;content&quot;: String, 
+   &quot;type&quot;: Integer
+} 
+</code></pre>
+<h2>Project Broacast</h2>
+<p>Multiple clients can connect to the simulated game transmission, such as that in every client will receive the game phrase event and show the score after this event.</p>
+<p><img src="twoclients.png" alt="Project execution flow"></p>
