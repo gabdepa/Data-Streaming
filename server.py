@@ -10,7 +10,6 @@ port = 12345
 # Simula uma partida
 jogo_simulado = simulate_game.simular_partida()
 
-
 # Enviar mensagem para um cliente
 def send_message_to_client(event, client_address, server_socket):
     print(f"(server) Sending message to client {client_address}")
@@ -23,8 +22,10 @@ def send_message_to_client(event, client_address, server_socket):
     # Codifica a string JSON antes de enviar via socket
     server_socket.sendto(json_message.encode(), client_address)  
  
+# Define tempo de intervalo entre envio de notificações
 user_input = input("Insira o tempo entre os envios de notificações: ")
 sleepTime = int(user_input)
+
 # Inicialização do socket UDP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_socket.bind(("0.0.0.0", port))  # Escuta em todas as interfaces de rede
@@ -34,8 +35,6 @@ print(f"(server) Server started on port {port}.")
 # Conjunto de clientes
 clients = set()
 
-# Mensagem
-i = 0
 # Contador de pacotes totais enviados
 count = 0
 
@@ -82,7 +81,6 @@ while True:
     # Garante que todas as mensagens sejam enviadas antes que o loop continue
     for thread in threads:
         thread.join()
-
     
-    i += 1
+    # Incrementa contador de mensagem enviada
     count += 1
