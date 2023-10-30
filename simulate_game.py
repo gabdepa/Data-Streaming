@@ -3,16 +3,15 @@ import random
 time_casa = "Time A"
 time_visitante = "Time B"
 
-TOTAL_EVENTOS_JOGO = 100
 
 # Lista de frases de narradores brasileiros para cada evento
 frases_futebol = {
     "gol": [
-        "Gol! É tetra! A torcida vai à loucura pelo {time}! {jogador} marcou!",
+        "Gol! A torcida vai à loucura pelo {time}! {jogador} marcou!",
         "Que beleza! Show de bola! {jogador} fez o gol pelo {time}!",
         "Balança as redes! É gol, meu amigo! {jogador} é o herói do {time}!",
         "Artilheiro não perdoa! A rede estufou! {jogador} marca para o {time}!",
-        "Show de categoria! É o primeiro gol para o {time}! {jogador} é o responsável!",
+        "Show de categoria! {jogador} de letra!",
     ],
     "perdeu_o_gol": [
         "{jogador} perdeu uma chance incrível de marcar para o {time}!",
@@ -36,7 +35,7 @@ frases_futebol = {
     "falta": [
         "O árbitro marca a falta e exibe o cartão amarelo. Olha a malandragem de {jogador} do {time}!",
         "Falta tática de {jogador} do {time} para segurar o contra-ataque.",
-        "A barreira está formada. A bola vai no ângulo!",
+        "A barreira está formada. A bola vai na trave!",
         "{jogador} do {time} leva o cartão amarelo por falta dura em {adversario}.",
         "Momento perigoso! A falta pode definir o jogo pelo {time}!",
     ],
@@ -49,7 +48,7 @@ frases_futebol = {
     ],
     "cartão_vermelho": [
         "Cartão vermelho direto! O juiz não perdoou! {jogador} do {time} é expulso após falta em {adversario}!",
-        "Comportamento antidesportivo resultina na expulsão de {jogador} do {time} após falta em {adversario}!",
+        "Comportamento antidesportivo resulta na expulsão de {jogador} do {time} após falta em {adversario}!",
         "Vai assistir o resto do jogo no chuveiro! {jogador} do {time} está fora após falta em {adversario}!",
         "Não dá para escapar da expulsão após essa falta de {jogador} do {time} em {adversario}!",
         "O juiz não hesitou em mostrar o vermelho para {jogador} do {time} após falta em {adversario}!",
@@ -58,7 +57,6 @@ frases_futebol = {
         "O árbitro aponta para a marca da cal. É pênalti! {jogador} do {time} enfrenta o goleiro!",
         "Cobrador contra goleiro. Quem leva a melhor? {jogador} do {time} está pronto!",
         "Defendeu! Goleiro pegou o pênalti de {jogador} do {time}! Frustração no rosto do artilheiro!",
-        "Cobrança perfeita! Bola na rede! {jogador} do {time} é o artilheiro!",
         "A torcida fica em silêncio enquanto {jogador} do {time} se prepara para a cobrança.",
     ]
 }
@@ -122,7 +120,7 @@ jogadores_visitante = [
 goleiro_time_casa = Goleiro("Taffarel", time_casa)
 goleiro_time_visitante = Goleiro("Marcos", time_visitante)
 
-def simular_partida():
+def simular_partida(total_eventos_jogo):
     jogo_simulado = []  # Lista para armazenar o placar e a frase de cada evento
 
 
@@ -134,7 +132,7 @@ def simular_partida():
     jogadores_cartao_vermelho = []
 
 
-    for i in range(1,TOTAL_EVENTOS_JOGO):
+    for i in range(0,total_eventos_jogo):
         evento = random.choices(
             list(distribuicao_probabilidade.keys()),
             weights=list(distribuicao_probabilidade.values())
