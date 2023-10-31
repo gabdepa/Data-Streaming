@@ -158,3 +158,8 @@
 (client) Number of packets received: 46 
 (client) Number of lost packets: 0 
 (client) Number of packets out of order: 0
+
+(client) Received end of transmission.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+(client) Number of packets received: 48 
+(client) Number of lost packets: 0 
+(client) Number of packets out of order: 0
