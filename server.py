@@ -4,14 +4,30 @@ import threading
 import json 
 import simulate_game
 import random
+from simulate_game import jogadores_casa 
+from simulate_game import jogadores_visitante 
+
+# # Enviar mensagem para um cliente
+# def send_formation_message_to_client(event, client_address, server_socket):
+#     with open("server.log", "a") as f:
+#         f.write(f"(server) Sending message to client {client_address}")
+
+#     # Cria um dicionário para a mensagem
+#     message= {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2], "time_passed": jogo_simulado[count][3]} # added type to datagram, which is the type of the event of the stream   
+#     # Converte o dicionário para uma string JSON
+#     json_message = json.dumps({"message": message })  
+#     # Espera pelo sinal para enviar a mensagem
+#     event.wait()  
+#     # Codifica a string JSON antes de enviar via socket
+#     server_socket.sendto(json_message.encode(), client_address) 
 
 # Enviar mensagem para um cliente
-def send_message_to_client(event, client_address, server_socket):
+def send_events_message_to_client(event, client_address, server_socket):
     with open("server.log", "a") as f:
         f.write(f"(server) Sending message to client {client_address}")
 
     # Cria um dicionário para a mensagem
-    message= {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2]} # added type to datagram, which is the type of the event of the stream   
+    message= {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2], "time_passed": jogo_simulado[count][3]} # added type to datagram, which is the type of the event of the stream   
     # Converte o dicionário para uma string JSON
     json_message = json.dumps({"message": message })  
     # Espera pelo sinal para enviar a mensagem
@@ -21,8 +37,8 @@ def send_message_to_client(event, client_address, server_socket):
 
 # Lida com registros de clientes
 def handle_client_registration(server_socket, clients, exit_flag):
-    # Define um timeout de 1 segundo
-    server_socket.settimeout(1) 
+    # Define um timeout random entre 3 e 9 segundos
+    server_socket.settimeout(random.randint(3,9)) 
     while not exit_flag[0]:
         try:
             message, address = server_socket.recvfrom(1024)
@@ -40,7 +56,7 @@ def handle_client_registration(server_socket, clients, exit_flag):
  
 port = 12345
 
-TOTAL_EVENTOS_JOGO = random.randint(90, 120)
+TOTAL_EVENTOS_JOGO = random.randint(90, 100)
 # Simula uma partida
 jogo_simulado = simulate_game.simular_partida(TOTAL_EVENTOS_JOGO) 
 
@@ -68,6 +84,7 @@ exit_flag = [False]
 client_registration_thread = threading.Thread(target=handle_client_registration, args=(server_socket,clients, exit_flag))
 client_registration_thread.start()
 
+
 while count < TOTAL_EVENTOS_JOGO:
     # Preparação para enviar o mesmo pacote para todos os clientes ao mesmo tempo
     event = threading.Event()
@@ -76,7 +93,7 @@ while count < TOTAL_EVENTOS_JOGO:
     # Para cada cliente registrado para receber mensagens
     for client in clients:
         # Cria thread para enviar a mensagem
-        thread = threading.Thread(target=send_message_to_client, args=(event, client, server_socket))
+        thread = threading.Thread(target=send_events_message_to_client, args=(event, client, server_socket))
         # Adiciona thread no vetor de threads
         threads.append(thread)
         # Thread começa a rodar   

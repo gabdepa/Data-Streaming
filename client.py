@@ -74,7 +74,9 @@ try:
         
         print('*'*80)
         print(message_dict['message']['content'])
+        print(message_dict['message']['type'])
         print(message_dict['message']['score'])
+        print(message_dict['message']['time_passed'])
         print('*'*80)
         # Atualiza o último pacote recebido
         last_received = current_order

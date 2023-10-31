@@ -48,3 +48,28 @@
 (client) Number of packets received: 35 
 (client) Number of lost packets: 0 
 (client) Number of packets out of order: 0
+
+(client) Ctrl+C received. Unregistering client.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+(client) Number of packets received: 17 
+(client) Number of lost packets: 0 
+(client) Number of packets out of order: 0
+
+(client) Ctrl+C received. Unregistering client.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+(client) Number of packets received: 60 
+(client) Number of lost packets: 0 
+(client) Number of packets out of order: 0
+
+(client) Received end of transmission.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+(client) Number of packets received: 110 
+(client) Number of lost packets: 0 
+(client) Number of packets out of order: 0
+
+(client) Received end of transmission.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+(client) Number of packets received: 92 
+(client) Number of lost packets: 0 
+(client) Number of packets out of order: 0
+
+(client) Received end of transmission.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+(client) Number of packets received: 101 
+(client) Number of lost packets: 0 
+(client) Number of packets out of order: 0
