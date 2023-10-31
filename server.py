@@ -7,19 +7,9 @@ import random
 from simulate_game import jogadores_casa 
 from simulate_game import jogadores_visitante 
 
-# # Enviar mensagem para um cliente
-# def send_formation_message_to_client(event, client_address, server_socket):
-#     with open("server.log", "a") as f:
-#         f.write(f"(server) Sending message to client {client_address}")
-
-#     # Cria um dicionário para a mensagem
-#     message= {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2], "time_passed": jogo_simulado[count][3]} # added type to datagram, which is the type of the event of the stream   
-#     # Converte o dicionário para uma string JSON
-#     json_message = json.dumps({"message": message })  
-#     # Espera pelo sinal para enviar a mensagem
-#     event.wait()  
-#     # Codifica a string JSON antes de enviar via socket
-#     server_socket.sendto(json_message.encode(), client_address) 
+# # Converte uma lista de objetos Jogador para uma lista de dicionários
+# def jogador_to_dict(jogadores):
+#     return [{"nome": jogador.nome, "time": jogador.time, "posicao": jogador.posicao, "cartao_vermelho": jogador.cartao_vermelho} for jogador in jogadores]
 
 # Enviar mensagem para um cliente
 def send_events_message_to_client(event, client_address, server_socket):
@@ -83,8 +73,7 @@ exit_flag = [False]
 # Inicializa nova thread para lidar com registro de clientes
 client_registration_thread = threading.Thread(target=handle_client_registration, args=(server_socket,clients, exit_flag))
 client_registration_thread.start()
-
-
+        
 while count < TOTAL_EVENTOS_JOGO:
     # Preparação para enviar o mesmo pacote para todos os clientes ao mesmo tempo
     event = threading.Event()

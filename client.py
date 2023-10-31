@@ -72,6 +72,7 @@ try:
         with open("client.log", "a") as f:
             f.write(f"(client) Received message: {message_dict} from {address} \n") 
         
+        print("\n")
         print('*'*80)
         print(message_dict['message']['content'])
         print(message_dict['message']['type'])
