@@ -16,7 +16,7 @@ def jogador_to_dict(jogadores):
 # Enviar mensagem para um cliente
 def send_events_message_to_client(event, client_address, server_socket):
     with open("server.log", "a") as f:
-        f.write(f"(server) Sending message to client {client_address}")
+        f.write(f"\n(server) Sending message to client {client_address}")
 
     # Cria um dicionário para a mensagem
     message1 = {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2], "time_passed": jogo_simulado[count][3]} # added type to datagram, which is the type of the event of the stream   
@@ -43,12 +43,12 @@ def handle_client_registration(server_socket, clients, exit_flag):
         with open("server.log", "a") as f:
             f.write(f"\n(server) Received {message} of address {address} on socket")
             if message.decode() == "register":
-                f.write(f"(server) Registering client {address}. \n")
+                f.write(f"\n(server) Registering client {address}. \n")
                 clients.add(address)
             elif message.decode() == "unregister":
-                f.write(f"(server) Unregistering client {address}. \n")
+                f.write(f"\n(server) Unregistering client {address}. \n")
                 clients.discard(address)
-            f.write(f"(server) Number of clients registered: {len(clients)}\n")
+            f.write(f"\n(server) Number of clients registered: {len(clients)}\n")
  
 
 # Define tempo de intervalo entre envio de notificações
@@ -60,13 +60,14 @@ port = 12345
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Escuta em todas as interfaces de rede
 server_socket.bind(("0.0.0.0", port))
+# Infos do servidor
 server_name = socket.gethostname()
 server_ip = socket.gethostbyname(server_name)
-print(f"(server)Server name: {server_name}")
-print(f"(server)Server ip: {server_ip}")
 
 with open("server.log", "w") as f:
     f.write(f"(server) Server started on port {port}. \n")
+    f.write(f"(server)Server name: {server_name}")
+    f.write(f"\n(server)Server ip: {server_ip}")
 
 # Simula uma partida
 jogo_simulado, total_eventos = simulate_game.simular_partida() 
@@ -115,7 +116,7 @@ for cAddr in clients:
     server_socket.sendto("End of transmission".encode(), cAddr)
     # Escreve mensagem no arquivo de Log
     with open("server.log", "a") as f:
-        f.write(f"(server) Sended end of transmission message for client {cAddr}. \n")
+        f.write(f"\n(server) Sended end of transmission message for client {cAddr}. \n")
 
 # Para terminar a thread de registro de clientes no final da execução do programa
 exit_flag[0] = True
