@@ -34,21 +34,22 @@ def send_events_message_to_client(event, client_address, server_socket):
 # Lida com registros de clientes
 def handle_client_registration(server_socket, clients, exit_flag):
     # Define um timeout random entre 3 e 9 segundos
-    server_socket.settimeout(random.randint(3,9)) 
+    # server_socket.settimeout(random.randint(3,9)) 
     while not exit_flag[0]:
         try:
             message, address = server_socket.recvfrom(1024)
+            with open("server.log", "a") as f:
+                f.write(f"\n(server) Received {message} of address {address} on socket")
+                if message.decode() == "register":
+                    f.write(f"\n(server) Registering client {address}. \n")
+                    clients.add(address)
+                elif message.decode() == "unregister":
+                    f.write(f"\n(server) Unregistering client {address}. \n")
+                    clients.discard(address)
+                f.write(f"\n(server) Number of clients registered: {len(clients)}\n")
         except (socket.timeout, TimeoutError):  # catch both TimeoutError and socket.timeout
             exit_flag[0] = True
-        with open("server.log", "a") as f:
-            f.write(f"\n(server) Received {message} of address {address} on socket")
-            if message.decode() == "register":
-                f.write(f"\n(server) Registering client {address}. \n")
-                clients.add(address)
-            elif message.decode() == "unregister":
-                f.write(f"\n(server) Unregistering client {address}. \n")
-                clients.discard(address)
-            f.write(f"\n(server) Number of clients registered: {len(clients)}\n")
+        
  
 
 # Define tempo de intervalo entre envio de notificações
@@ -66,8 +67,8 @@ server_ip = socket.gethostbyname(server_name)
 
 with open("server.log", "w") as f:
     f.write(f"(server) Server started on port {port}. \n")
-    f.write(f"(server)Server name: {server_name}")
-    f.write(f"\n(server)Server ip: {server_ip}")
+    f.write(f"(server) Server name: {server_name}")
+    f.write(f"\n(server) Server ip: {server_ip}")
 
 # Simula uma partida
 jogo_simulado, total_eventos = simulate_game.simular_partida() 
