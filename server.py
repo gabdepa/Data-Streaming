@@ -2,16 +2,8 @@ import socket
 import time
 import threading
 import json 
-
 import simulate_game
 import random
-
-port = 12345
-
-TOTAL_EVENTOS_JOGO = random.randint(30, 100)
-
-# Simula uma partida
-jogo_simulado = simulate_game.simular_partida(TOTAL_EVENTOS_JOGO)
 
 # Enviar mensagem para um cliente
 def send_message_to_client(event, client_address, server_socket):
@@ -28,9 +20,13 @@ def send_message_to_client(event, client_address, server_socket):
     server_socket.sendto(json_message.encode(), client_address) 
 
 # Lida com registros de clientes
-def handle_client_registration(server_socket, clients):
-    while True:
-        message, address = server_socket.recvfrom(1024)
+def handle_client_registration(server_socket, clients, exit_flag):
+    server_socket.settimeout(1)  # Define um timeout de 1 segundo
+    while not exit_flag[0]:
+        try:
+            message, address = server_socket.recvfrom(1024)
+        except (socket.timeout, TimeoutError):  # catch both TimeoutError and socket.timeout
+            exit_flag[0] = True
         with open("server.log", "a") as f:
             f.write(f"\n(server) Received {message} of address {address} on socket")
 
@@ -43,8 +39,14 @@ def handle_client_registration(server_socket, clients):
 
             f.write(f"(server) Number of clients registered: {len(clients)}\n")
  
+port = 12345
+
+TOTAL_EVENTOS_JOGO = random.randint(30, 100)
+# Simula uma partida
+jogo_simulado = simulate_game.simular_partida(TOTAL_EVENTOS_JOGO) 
+
 # Define tempo de intervalo entre envio de notificações
-user_input = input("Insira o tempo entre os envios de notificações: ")
+user_input = input("(server)Insira o tempo entre os envios de notificações: ")
 sleepTime = int(user_input)
 
 # Inicialização do socket UDP
@@ -60,8 +62,10 @@ clients = set()
 # Contador de pacotes totais enviados
 count = 0
 
+# Cria uma lista para armazenar o sinalizador de saída
+exit_flag = [False]
 # Inicializa nova thread para lidar com registro de clientes
-client_registration_thread = threading.Thread(target=handle_client_registration, args=(server_socket,clients))
+client_registration_thread = threading.Thread(target=handle_client_registration, args=(server_socket,clients, exit_flag))
 client_registration_thread.start()
 
 while count < TOTAL_EVENTOS_JOGO:
@@ -92,9 +96,12 @@ while count < TOTAL_EVENTOS_JOGO:
     count += 1
 
 for cAddr in clients:
-    with open("server.log", "a") as f:
-        f.write(f"(server) Sended end of transmission message. \n")
     server_socket.sendto("End of transmission".encode(), cAddr)
+    with open("server.log", "a") as f:
+        f.write(f"(server) Sended end of transmission message for client {cAddr}. \n")
 
-
-client_registration_thread.interrupt()
+# Para terminar a thread no final da execução do programa
+exit_flag[0] = True
+# Espera a thread terminar
+client_registration_thread.join()
+print("(server)Jogo Encerrado, encerrando execução!")  
