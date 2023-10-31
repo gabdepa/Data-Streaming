@@ -50,15 +50,12 @@ def handle_client_registration(server_socket, clients, exit_flag):
                 clients.discard(address)
             f.write(f"(server) Number of clients registered: {len(clients)}\n")
  
-port = 12345
-
-# Simula uma partida
-jogo_simulado, total_eventos = simulate_game.simular_partida() 
 
 # Define tempo de intervalo entre envio de notificações
 user_input = input("(server)Insira o tempo entre os envios de notificações: ")
 sleepTime = int(user_input)
 
+port = 12345
 # Inicialização do socket UDP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Escuta em todas as interfaces de rede
@@ -66,6 +63,9 @@ server_socket.bind(("0.0.0.0", port))
 
 with open("server.log", "w") as f:
     f.write(f"(server) Server started on port {port}. \n")
+
+# Simula uma partida
+jogo_simulado, total_eventos = simulate_game.simular_partida() 
 
 # Conjunto de clientes
 clients = set()
@@ -79,7 +79,7 @@ exit_flag = [False]
 client_registration_thread = threading.Thread(target=handle_client_registration, args=(server_socket,clients, exit_flag))
 client_registration_thread.start()
         
-while count < total_eventos:
+while count < total_eventos and len(clients) != 0:
     # Preparação para enviar o mesmo pacote para todos os clientes ao mesmo tempo
     event = threading.Event()
     threads = []
@@ -109,6 +109,7 @@ while count < total_eventos:
 # Para cada cliente no conjunto envia sinal de que a transmissão foi encerrada
 for cAddr in clients:
     server_socket.sendto("End of transmission".encode(), cAddr)
+    # Escreve mensagem no arquivo de Log
     with open("server.log", "a") as f:
         f.write(f"(server) Sended end of transmission message for client {cAddr}. \n")
 

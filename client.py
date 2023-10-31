@@ -1,6 +1,20 @@
 import socket
 import json
 
+# Gera estatísticas
+def generateClientStats(receivedEndOfTransmission):
+    with open("client_stats.log", "a") as f:
+        if receivedEndOfTransmission:
+            f.write("\n(client) Received end of transmission.")
+        else : 
+            f.write("\n(client) Ctrl+C received. Unregistering client.")
+
+        # Dados de estatística de streaming
+        f.write(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \n")
+        f.write(f"(client) Number of packets received: {received_packets} \n")
+        f.write(f"(client) Number of lost packets: {lost_packets} \n")
+        f.write(f"(client) Number of packets out of order: {out_of_order}\n")
+
 # Formata output da escalação dos times
 def format_teams(team_a, goleiro_a, team_b, goleiro_b):
     """
@@ -38,7 +52,7 @@ port = 12345
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Envia solicitação de registro no servidor
 client_socket.sendto("register".encode(), (server_address, port))
-
+# Escreve mensagem de conectado ao servidor
 with open("client.log", "w") as f:
     f.write(f"(client) Client connected to server {server_address} on port {port}.\n")
 
@@ -48,30 +62,20 @@ last_received = 0 # Número do último pacote recebido
 received_packets = 0  # Contador de pacotes recebidos
 first_packet_received = True  # Flag para verificar se é o primeiro pacote recebido
 
-def generateClientStats(receivedEndOfTransmission):
-    with open("client_stats.log", "a") as f:
-        if receivedEndOfTransmission:
-            f.write("\n(client) Received end of transmission.")
-        else : 
-            f.write("\n(client) Ctrl+C received. Unregistering client.")
-
-        # Dados de estatística de streaming
-        f.write(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STATISTICS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \n")
-        f.write(f"(client) Number of packets received: {received_packets} \n")
-        f.write(f"(client) Number of lost packets: {lost_packets} \n")
-        f.write(f"(client) Number of packets out of order: {out_of_order}\n")
-
 try:
     while True:
         # Recebe mensagem e endereço do socket
         message, address = client_socket.recvfrom(4096)
         
+        # Caso recebeu fim da Transmissão
         if message.decode() == "End of transmission":
+            # Imprime mensagem de fim de jogo
             print('*'*80)
             print('Fim de jogo!')
             print('*'*80)
-
+            # Gera estatísticas da Transmissão
             generateClientStats(True)
+            # Interrompe execução
             break
 
         # Converte a mensagem JSON para um dicionário Python
@@ -97,10 +101,14 @@ try:
         elif current_order > last_received + 1:
             lost_packets += (current_order - last_received - 1)
         
-        # Implementar alguma operação nos dados recebidos......
+        # Atualiza o último pacote recebido
+        last_received = current_order
+
+        # Escreve mensagem no arquivo de log
         with open("client.log", "a") as f:
             f.write(f"(client) Received message: {message_dict} from {address} \n") 
         
+        # Implementar alguma operação nos dados recebidos......imprime na tela
         print("\n")
         print('*'*80)
         formatted_output = format_teams(message_dict['timeA'], message_dict['goleiroA'], message_dict['timeB'], message_dict['goleiroB'])
@@ -110,13 +118,11 @@ try:
         print(message_dict['message']['score'])
         print(message_dict['message']['time_passed'])
         print('*'*80)
-        # Atualiza o último pacote recebido
-        last_received = current_order
 
 # Caso cliente seja interrompido
 except KeyboardInterrupt:
     # Envia mensagem de cancelamento de registro ao servidor
     client_socket.sendto("unregister".encode(), (server_address, port))
-
+    # Finaliza estatísticas
     generateClientStats(False)
 
