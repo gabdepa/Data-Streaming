@@ -1,6 +1,35 @@
 import socket
 import json
 
+# Formata output da escalação dos times
+def format_teams(team_a, goleiro_a, team_b, goleiro_b):
+    """
+    Format the given team A and team B data into a human-readable string.
+    
+    Parameters:
+    - team_a (list): List of dictionaries containing player data for team A
+    - team_b (list): List of dictionaries containing player data for team B
+    
+    Returns:
+    - str: Formatted string
+    """
+    output = goleiro_a['time'].ljust(45) + goleiro_b['time']+"\n"
+    output += "--------".ljust(45) + "--------\n"
+    output += goleiro_a['nome'].ljust(45) + goleiro_b['nome']+"\n"
+    
+    for a, b in zip(team_a, team_b):
+        a_name = f"{a['nome']} {a['posicao']} {'*' * a.get('gols', 0)}"
+        if a['cartao_vermelho']:    
+            a_name += " (Red Card)"
+        
+        b_name = f"{b['nome']} {b['posicao']} {'*' * b.get('gols', 0)}"
+        if b['cartao_vermelho']:
+            b_name += " (Red Card)"
+        
+        output += f"{a_name}".ljust(45) + f"{b_name}\n"
+        
+    return output
+
 server_address = "127.0.0.1"
 # server_address = str(input("Enter the server address:"))
 port = 12345
@@ -35,7 +64,7 @@ def generateClientStats(receivedEndOfTransmission):
 try:
     while True:
         # Recebe mensagem e endereço do socket
-        message, address = client_socket.recvfrom(1024)
+        message, address = client_socket.recvfrom(4096)
         
         if message.decode() == "End of transmission":
             print('*'*80)
@@ -74,6 +103,8 @@ try:
         
         print("\n")
         print('*'*80)
+        formatted_output = format_teams(message_dict['timeA'], message_dict['goleiroA'], message_dict['timeB'], message_dict['goleiroB'])
+        print(formatted_output)
         print(message_dict['message']['content'])
         print(message_dict['message']['type'])
         print(message_dict['message']['score'])

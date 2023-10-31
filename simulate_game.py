@@ -3,7 +3,6 @@ import random
 time_casa = "Galáticos"
 time_visitante = "The Bests"
 
-
 # Lista de frases de narradores brasileiros para cada evento
 frases_futebol = {
     "Gol!": [
@@ -64,79 +63,84 @@ frases_futebol = {
 
 # Distribuição de probabilidade aproximada para eventos em uma partida de futebol
 distribuicao_probabilidade = {
-    "Gol!": 0.03,  # Diminuí a probabilidade de gol
-    "Gol Perdido!": 0.12,  # Novo evento: jogador perde o gol
-    "Defesa!": 0.15,
-    "Drible mágico!": 0.2,
-    "Falta!": 0.2,
+    "Gol!": 0.03,  
+    "Gol Perdido!": 0.1,
+    "Defesa!": 0.12,
+    "Drible mágico!": 0.24,
+    "Falta!": 0.24,
     "Cartão Amarelo!": 0.15,
-    "Cartão Vermelho!": 0.05,
-    "Pênalti!!": 0.2,  # Aumentei a probabilidade de pênalti
+    "Cartão Vermelho!": 0.02,
+    "Pênalti!!": 0.1, 
 }
 
 
-
 class Jogador:
-    def __init__(self, nome, time, posicao):
+    def __init__(self, nome, time, posicao, gols):
         self.nome = nome
         self.time = time
         self.cartao_vermelho = False  # Adicione um atributo para controlar se o jogador recebeu cartão vermelho
         self.posicao = posicao
+        self.gols = gols
 
 class Goleiro:
-    def __init__(self, nome, equipe):
+    def __init__(self, nome, time):
         self.nome = nome
-        self.equipe = equipe
+        self.time = time
 
 
 # Lista de jogadores que não são goleiros
 jogadores_casa = [
-    Jogador("Roberto Carlos", time_casa, "Lateral Esquerdo"),
-    Jogador("Cafu", time_casa, "Lateral Direito"),
-    Jogador("Cannavaro", time_casa, "Zagueiro"),
-    Jogador("Beckenbauer", time_casa, "Zagueiro"),
-    Jogador("Iniesta", time_casa, "Meio-Campo"),
-    Jogador("Xavi", time_casa, "Meio-Campo"),
-    Jogador("Zidane", time_casa, "Meio-Campo"), 
-    Jogador("Ronaldinho", time_casa, "Meio-Campo"), 
-    Jogador("Pelé", time_casa, "Atacante"), 
-    Jogador("Cruyff", time_casa, "Atacante"), 
+    Jogador("Roberto Carlos", time_casa, "LE", 0),
+    Jogador("Cafú", time_casa, "LD", 0),
+    Jogador("Cannavaro", time_casa, "ZAG", 0),
+    Jogador("Beckenbauer", time_casa, "ZAG", 0),
+    Jogador("Iniesta", time_casa, "MC", 0),
+    Jogador("Xavi", time_casa, "MC", 0),
+    Jogador("Zidane", time_casa, "MEI", 0), 
+    Jogador("Ronaldinho", time_casa, "MEI", 0), 
+    Jogador("Pelé", time_casa, "ATA", 0), 
+    Jogador("Cruyff", time_casa, "ATA", 0), 
 ]
 
 jogadores_visitante = [
-    Jogador("Carlos Alberto", time_visitante, "Lateral Direito"),
-    Jogador("Marcelo", time_visitante, "Lateral Esquerdo"),
-    Jogador("Maldini", time_visitante, "Zagueiro"),
-    Jogador("Sergio Ramos", time_visitante, "Zagueiro"),
-    Jogador("Pirlo", time_visitante, "Meio-Campo"),
-    Jogador("Seedorf", time_visitante, "Meio-Campo"),
-    Jogador("Kaká", time_visitante, "Meio-Campo"),
-    Jogador("Messi", time_visitante, "Meio-Campo"),
-    Jogador("Neymar", time_visitante, "Atacante"),
-    Jogador("Ronaldo", time_visitante, "Atacante"),
+    Jogador("Carlos Alberto", time_visitante, "LD", 0),
+    Jogador("Marcelo", time_visitante, "LE", 0),
+    Jogador("Maldini", time_visitante, "ZAG", 0),
+    Jogador("Sergio Ramos", time_visitante, "ZAG", 0),
+    Jogador("Pirlo", time_visitante, "MC", 0),
+    Jogador("Seedorf", time_visitante, "MC", 0),
+    Jogador("Kaká", time_visitante, "MEI", 0),
+    Jogador("Messi", time_visitante, "MEI", 0),
+    Jogador("Cristiano Ronaldo", time_visitante, "ATA", 0),
+    Jogador("Ronaldo", time_visitante, "ATA", 0),
 ]
 
 # Criação dos objetos dos goleiros
 goleiro_time_casa = Goleiro("Dida", time_casa)
 goleiro_time_visitante = Goleiro("Buffon", time_visitante)
 
-def simular_partida(total_eventos_jogo):
-    jogo_simulado = []  # Lista para armazenar o placar, a frase de cada evento e o tempo de jogo
+def simular_partida():
+    # Lista para armazenar o placar, a frase de cada evento e o tempo de jogo
+    jogo_simulado = []  
 
     # Placar inicial
     placar_casa = 0
     placar_visitante = 0
+    # Tempo de Jogo
     tempo = 0
 
+    # Total de eventos no jogo
+    total_eventos = 0
 
     # Lista de jogadores que receberam cartão vermelho
     jogadores_cartao_vermelho = []
 
-    for i in range(0,total_eventos_jogo):
+    while tempo < 97:
         evento = random.choices(
             list(distribuicao_probabilidade.keys()),
             weights=list(distribuicao_probabilidade.values())
         )[0]
+        total_eventos+=1
 
         if evento == "Defesa!":
             # Seleciona um goleiro de cada time para eventos de defesa
@@ -159,6 +163,7 @@ def simular_partida(total_eventos_jogo):
 
         # Atualiza o placar se o evento for um gol
         if evento == "Gol!":
+            jogador.gols += 1
             if jogador.time == time_casa:
                 placar_casa += 1
             else:
@@ -192,7 +197,7 @@ def simular_partida(total_eventos_jogo):
 
         placar = "Placar: {0} {1} - {2} {3}".format(time_casa,placar_casa, placar_visitante,time_visitante)
 
-        tempo+=1
+        tempo += random.randint(1,3)
         if tempo > 45 and tempo < 50:
             tempo_jogo = "Tempo de Jogo: 45+{0}'".format(tempo-45)    
         elif tempo > 90:
@@ -201,6 +206,4 @@ def simular_partida(total_eventos_jogo):
             tempo_jogo = "Tempo de Jogo: {0}'".format(tempo)
         jogo_simulado.append((placar, frase_evento, evento, tempo_jogo))
 
-    # print(jogo_simulado)
-    # print("Placar final: {} - {}".format(placar_casa, placar_visitante))
-    return jogo_simulado
+    return jogo_simulado, total_eventos

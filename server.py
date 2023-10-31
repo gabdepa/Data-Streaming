@@ -5,11 +5,13 @@ import json
 import simulate_game
 import random
 from simulate_game import jogadores_casa 
+from simulate_game import goleiro_time_casa
 from simulate_game import jogadores_visitante 
+from simulate_game import goleiro_time_visitante
 
-# # Converte uma lista de objetos Jogador para uma lista de dicionários
-# def jogador_to_dict(jogadores):
-#     return [{"nome": jogador.nome, "time": jogador.time, "posicao": jogador.posicao, "cartao_vermelho": jogador.cartao_vermelho} for jogador in jogadores]
+# Converte uma lista de objetos Jogador para uma lista de dicionários
+def jogador_to_dict(jogadores):
+    return [{"nome": jogador.nome, "time": jogador.time, "posicao": jogador.posicao, "cartao_vermelho": jogador.cartao_vermelho, "gols": jogador.gols} for jogador in jogadores]
 
 # Enviar mensagem para um cliente
 def send_events_message_to_client(event, client_address, server_socket):
@@ -17,9 +19,13 @@ def send_events_message_to_client(event, client_address, server_socket):
         f.write(f"(server) Sending message to client {client_address}")
 
     # Cria um dicionário para a mensagem
-    message= {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2], "time_passed": jogo_simulado[count][3]} # added type to datagram, which is the type of the event of the stream   
+    message1 = {"count": count, "score": jogo_simulado[count][0],"content": jogo_simulado[count][1], "type": jogo_simulado[count][2], "time_passed": jogo_simulado[count][3]} # added type to datagram, which is the type of the event of the stream   
+    timeA = jogador_to_dict(jogadores_casa)
+    goleiroA = {"nome": goleiro_time_casa.nome, "time": goleiro_time_casa.time}
+    timeB = jogador_to_dict(jogadores_visitante)
+    goleiroB = {"nome": goleiro_time_visitante.nome, "time":goleiro_time_visitante.time}
     # Converte o dicionário para uma string JSON
-    json_message = json.dumps({"message": message })  
+    json_message = json.dumps({"message": message1, "timeA": timeA, "timeB": timeB, "goleiroA": goleiroA, "goleiroB": goleiroB })  
     # Espera pelo sinal para enviar a mensagem
     event.wait()  
     # Codifica a string JSON antes de enviar via socket
@@ -46,9 +52,8 @@ def handle_client_registration(server_socket, clients, exit_flag):
  
 port = 12345
 
-TOTAL_EVENTOS_JOGO = random.randint(90, 100)
 # Simula uma partida
-jogo_simulado = simulate_game.simular_partida(TOTAL_EVENTOS_JOGO) 
+jogo_simulado, total_eventos = simulate_game.simular_partida() 
 
 # Define tempo de intervalo entre envio de notificações
 user_input = input("(server)Insira o tempo entre os envios de notificações: ")
@@ -74,7 +79,7 @@ exit_flag = [False]
 client_registration_thread = threading.Thread(target=handle_client_registration, args=(server_socket,clients, exit_flag))
 client_registration_thread.start()
         
-while count < TOTAL_EVENTOS_JOGO:
+while count < total_eventos:
     # Preparação para enviar o mesmo pacote para todos os clientes ao mesmo tempo
     event = threading.Event()
     threads = []
