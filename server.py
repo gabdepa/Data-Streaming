@@ -59,7 +59,11 @@ port = 12345
 # Inicialização do socket UDP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Escuta em todas as interfaces de rede
-server_socket.bind(("0.0.0.0", port))  
+server_socket.bind(("0.0.0.0", port))
+server_name = socket.gethostname()
+server_ip = socket.gethostbyname(server_name)
+print(f"(server)Server name: {server_name}")
+print(f"(server)Server ip: {server_ip}")
 
 with open("server.log", "w") as f:
     f.write(f"(server) Server started on port {port}. \n")

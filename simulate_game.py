@@ -63,13 +63,13 @@ frases_futebol = {
 
 # Distribuição de probabilidade aproximada para eventos em uma partida de futebol
 distribuicao_probabilidade = {
-    "Gol!": 0.34, # 0.04  
+    "Gol!": 0.04,
     "Gol Perdido!": 0.1,
     "Defesa!": 0.12,
     "Drible mágico!": 0.24,
     "Falta!": 0.24,
     "Cartão Amarelo!": 0.15,
-    "Cartão Vermelho!": 0.31, # 0.01
+    "Cartão Vermelho!": 0.01, 
     "Pênalti!!": 0.1, 
 }
 
