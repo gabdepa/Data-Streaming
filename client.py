@@ -16,7 +16,7 @@ def generateClientStats(receivedEndOfTransmission):
         f.write(f"(client) Number of packets out of order: {out_of_order}\n")
 
 # Formata output da escalação dos times
-def format_teams(team_a, goleiro_a, team_b, goleiro_b):
+def format_teams(team_a, goleiro_a, team_b, goleiro_b, tempo):
     """
     Format the given team A and team B data into a human-readable string.
     
@@ -31,13 +31,23 @@ def format_teams(team_a, goleiro_a, team_b, goleiro_b):
     output += "--------".ljust(45) + "--------\n"
     output += goleiro_a['nome'].ljust(45) + goleiro_b['nome']+"\n"
     
-    for a, b in zip(team_a, team_b):
-        a_name = f"{a['nome']} {a['posicao']} {'*' * a.get('gols', 0)}"
-        if a['cartao_vermelho']:    
+    for a, b in zip(team_a, team_b):     
+        a_name = f"{a['nome']} {a['posicao']} " 
+        
+        for tempo_gol in a['tempo_gols']:
+            if int(tempo_gol) <= int(tempo): 
+                a_name+= '*'
+
+        if a['cartao_vermelho'] and int(a['tempo_cv']) < int(tempo):     
             a_name += " (Red Card)"
         
-        b_name = f"{b['nome']} {b['posicao']} {'*' * b.get('gols', 0)}"
-        if b['cartao_vermelho']:
+        
+        b_name = f"{b['nome']} {b['posicao']} "
+        
+        for tempo_gol in b['tempo_gols']:
+            if int(tempo_gol) <= int(tempo): 
+                b_name+= '*'
+        if b['cartao_vermelho'] and int(b['tempo_cv']) < int(tempo) :
             b_name += " (Red Card)"
         
         output += f"{a_name}".ljust(45) + f"{b_name}\n"
@@ -111,12 +121,20 @@ try:
         # Implementar alguma operação nos dados recebidos......imprime na tela
         print("\n")
         print('*'*80)
-        formatted_output = format_teams(message_dict['timeA'], message_dict['goleiroA'], message_dict['timeB'], message_dict['goleiroB'])
+        formatted_output = format_teams(message_dict['timeA'], message_dict['goleiroA'], message_dict['timeB'], message_dict['goleiroB'],message_dict['message']['time_passed'])
         print(formatted_output)
         print(message_dict['message']['content'])
         print(message_dict['message']['type'])
         print(message_dict['message']['score'])
-        print(message_dict['message']['time_passed'])
+        tempo = message_dict['message']['time_passed']
+
+        if tempo > 45 and tempo < 50:
+            tempo_jogo = "Tempo de Jogo: 45+{0}'".format(tempo-45)    
+        elif tempo > 90:
+            tempo_jogo = "Tempo de Jogo: 90+{0}'".format(tempo-90)
+        else:
+            tempo_jogo = "Tempo de Jogo: {0}'".format(tempo)
+        print(tempo_jogo)
         print('*'*80)
 
 # Caso cliente seja interrompido

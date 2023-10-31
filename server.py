@@ -11,7 +11,7 @@ from simulate_game import goleiro_time_visitante
 
 # Converte uma lista de objetos Jogador para uma lista de dicionários
 def jogador_to_dict(jogadores):
-    return [{"nome": jogador.nome, "time": jogador.time, "posicao": jogador.posicao, "cartao_vermelho": jogador.cartao_vermelho, "gols": jogador.gols} for jogador in jogadores]
+    return [{"nome": jogador.nome, "time": jogador.time, "posicao": jogador.posicao, "cartao_vermelho": jogador.cartao_vermelho, "gols": jogador.gols, "tempo_gols": jogador.tempo_gols, "tempo_cv": jogador.tempo_cv} for jogador in jogadores]
 
 # Enviar mensagem para um cliente
 def send_events_message_to_client(event, client_address, server_socket):
@@ -79,7 +79,7 @@ exit_flag = [False]
 client_registration_thread = threading.Thread(target=handle_client_registration, args=(server_socket,clients, exit_flag))
 client_registration_thread.start()
         
-while count < total_eventos and len(clients) != 0:
+while count < total_eventos:
     # Preparação para enviar o mesmo pacote para todos os clientes ao mesmo tempo
     event = threading.Event()
     threads = []

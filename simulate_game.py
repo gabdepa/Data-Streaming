@@ -63,24 +63,27 @@ frases_futebol = {
 
 # Distribuição de probabilidade aproximada para eventos em uma partida de futebol
 distribuicao_probabilidade = {
-    "Gol!": 0.03,  
+    "Gol!": 0.34, # 0.04  
     "Gol Perdido!": 0.1,
     "Defesa!": 0.12,
     "Drible mágico!": 0.24,
     "Falta!": 0.24,
     "Cartão Amarelo!": 0.15,
-    "Cartão Vermelho!": 0.02,
+    "Cartão Vermelho!": 0.31, # 0.01
     "Pênalti!!": 0.1, 
 }
 
 
 class Jogador:
-    def __init__(self, nome, time, posicao, gols):
+    def __init__(self, nome, time, posicao, gols, tempo_gols,tempo_cv):
         self.nome = nome
         self.time = time
         self.cartao_vermelho = False  # Adicione um atributo para controlar se o jogador recebeu cartão vermelho
         self.posicao = posicao
         self.gols = gols
+        self.tempo_gols = tempo_gols
+        self.tempo_cv = tempo_cv
+
 
 class Goleiro:
     def __init__(self, nome, time):
@@ -90,29 +93,29 @@ class Goleiro:
 
 # Lista de jogadores que não são goleiros
 jogadores_casa = [
-    Jogador("Roberto Carlos", time_casa, "LE", 0),
-    Jogador("Cafú", time_casa, "LD", 0),
-    Jogador("Cannavaro", time_casa, "ZAG", 0),
-    Jogador("Beckenbauer", time_casa, "ZAG", 0),
-    Jogador("Iniesta", time_casa, "MC", 0),
-    Jogador("Xavi", time_casa, "MC", 0),
-    Jogador("Zidane", time_casa, "MEI", 0), 
-    Jogador("Ronaldinho", time_casa, "MEI", 0), 
-    Jogador("Pelé", time_casa, "ATA", 0), 
-    Jogador("Cruyff", time_casa, "ATA", 0), 
+    Jogador("Roberto Carlos", time_casa, "LE", 0 , [], 0),
+    Jogador("Cafú", time_casa, "LD", 0 , [], 0),
+    Jogador("Cannavaro", time_casa, "ZAG", 0 , [], 0),
+    Jogador("Beckenbauer", time_casa, "ZAG", 0 , [], 0),
+    Jogador("Iniesta", time_casa, "MC", 0 , [], 0),
+    Jogador("Xavi", time_casa, "MC", 0 , [], 0),
+    Jogador("Zidane", time_casa, "MEI", 0, [], 0),  
+    Jogador("Ronaldinho", time_casa, "MEI", 0, [], 0),  
+    Jogador("Pelé", time_casa, "ATA", 0, [], 0),  
+    Jogador("Cruyff", time_casa, "ATA", 0, [], 0),  
 ]
 
 jogadores_visitante = [
-    Jogador("Carlos Alberto", time_visitante, "LD", 0),
-    Jogador("Marcelo", time_visitante, "LE", 0),
-    Jogador("Maldini", time_visitante, "ZAG", 0),
-    Jogador("Sergio Ramos", time_visitante, "ZAG", 0),
-    Jogador("Pirlo", time_visitante, "MC", 0),
-    Jogador("Seedorf", time_visitante, "MC", 0),
-    Jogador("Kaká", time_visitante, "MEI", 0),
-    Jogador("Messi", time_visitante, "MEI", 0),
-    Jogador("Cristiano Ronaldo", time_visitante, "ATA", 0),
-    Jogador("Ronaldo", time_visitante, "ATA", 0),
+    Jogador("Carlos Alberto", time_visitante, "LD", 0, [], 0),
+    Jogador("Marcelo", time_visitante, "LE", 0, [], 0),
+    Jogador("Maldini", time_visitante, "ZAG", 0, [], 0),
+    Jogador("Sergio Ramos", time_visitante, "ZAG", 0, [], 0),
+    Jogador("Pirlo", time_visitante, "MC", 0, [], 0),
+    Jogador("Seedorf", time_visitante, "MC", 0, [], 0),
+    Jogador("Kaká", time_visitante, "MEI", 0, [], 0),
+    Jogador("Messi", time_visitante, "MEI", 0, [], 0),
+    Jogador("Cristiano Ronaldo", time_visitante, "ATA", 0, [], 0),
+    Jogador("Ronaldo", time_visitante, "ATA", 0, [], 0),
 ]
 
 # Criação dos objetos dos goleiros
@@ -164,6 +167,8 @@ def simular_partida():
         # Atualiza o placar se o evento for um gol
         if evento == "Gol!":
             jogador.gols += 1
+            jogador.tempo_gols.append(tempo)
+            
             if jogador.time == time_casa:
                 placar_casa += 1
             else:
@@ -193,17 +198,14 @@ def simular_partida():
 
         if evento == "Cartão Vermelho!":
             jogador.cartao_vermelho = True  # Marca o jogador com cartão vermelho
+            jogador.tempo_cv = tempo  # Marca o jogador com cartão vermelho
             jogadores_cartao_vermelho.append(jogador)
 
         placar = "Placar: {0} {1} - {2} {3}".format(time_casa,placar_casa, placar_visitante,time_visitante)
 
         tempo += random.randint(1,3)
-        if tempo > 45 and tempo < 50:
-            tempo_jogo = "Tempo de Jogo: 45+{0}'".format(tempo-45)    
-        elif tempo > 90:
-            tempo_jogo = "Tempo de Jogo: 90+{0}'".format(tempo-90)
-        else:
-            tempo_jogo = "Tempo de Jogo: {0}'".format(tempo)
-        jogo_simulado.append((placar, frase_evento, evento, tempo_jogo))
+        
+
+        jogo_simulado.append((placar, frase_evento, evento, tempo))
 
     return jogo_simulado, total_eventos
