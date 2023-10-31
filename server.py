@@ -50,7 +50,8 @@ sleepTime = int(user_input)
 
 # Inicialização do socket UDP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server_socket.bind(("0.0.0.0", port))  # Escuta em todas as interfaces de rede
+# Escuta em todas as interfaces de rede
+server_socket.bind(("0.0.0.0", port))  
 
 with open("server.log", "a") as f:
     f.write(f"(server) Server started on port {port}. \n")
@@ -94,6 +95,7 @@ while count < TOTAL_EVENTOS_JOGO:
     # Incrementa contador de mensagem enviada
     count += 1
 
+# Para cada cliente no conjunto envia sinal de que a transmissão foi encerrada
 for cAddr in clients:
     server_socket.sendto("End of transmission".encode(), cAddr)
     with open("server.log", "a") as f:
