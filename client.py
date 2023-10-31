@@ -39,7 +39,7 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Envia solicitação de registro no servidor
 client_socket.sendto("register".encode(), (server_address, port))
 
-with open("client.log", "a") as f:
+with open("client.log", "w") as f:
     f.write(f"(client) Client connected to server {server_address} on port {port}.\n")
 
 lost_packets = 0 # Número de pacotes perdidos

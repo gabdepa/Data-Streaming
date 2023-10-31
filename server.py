@@ -64,7 +64,7 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Escuta em todas as interfaces de rede
 server_socket.bind(("0.0.0.0", port))  
 
-with open("server.log", "a") as f:
+with open("server.log", "w") as f:
     f.write(f"(server) Server started on port {port}. \n")
 
 # Conjunto de clientes
