@@ -21,7 +21,8 @@ def send_message_to_client(event, client_address, server_socket):
 
 # Lida com registros de clientes
 def handle_client_registration(server_socket, clients, exit_flag):
-    server_socket.settimeout(1)  # Define um timeout de 1 segundo
+    # Define um timeout de 1 segundo
+    server_socket.settimeout(1) 
     while not exit_flag[0]:
         try:
             message, address = server_socket.recvfrom(1024)
@@ -29,19 +30,17 @@ def handle_client_registration(server_socket, clients, exit_flag):
             exit_flag[0] = True
         with open("server.log", "a") as f:
             f.write(f"\n(server) Received {message} of address {address} on socket")
-
             if message.decode() == "register":
                 f.write(f"(server) Registering client {address}. \n")
                 clients.add(address)
             elif message.decode() == "unregister":
                 f.write(f"(server) Unregistering client {address}. \n")
                 clients.discard(address)
-
             f.write(f"(server) Number of clients registered: {len(clients)}\n")
  
 port = 12345
 
-TOTAL_EVENTOS_JOGO = random.randint(30, 100)
+TOTAL_EVENTOS_JOGO = random.randint(90, 120)
 # Simula uma partida
 jogo_simulado = simulate_game.simular_partida(TOTAL_EVENTOS_JOGO) 
 
@@ -100,7 +99,7 @@ for cAddr in clients:
     with open("server.log", "a") as f:
         f.write(f"(server) Sended end of transmission message for client {cAddr}. \n")
 
-# Para terminar a thread no final da execução do programa
+# Para terminar a thread de registro de clientes no final da execução do programa
 exit_flag[0] = True
 # Espera a thread terminar
 client_registration_thread.join()
