@@ -3,7 +3,7 @@ import json
 
 # Gera estatísticas
 def generateClientStats(receivedEndOfTransmission):
-    with open("client_stats.log", "a") as f:
+    with open("client_stats.log", "w") as f:
         if receivedEndOfTransmission:
             f.write("\n(client) Received end of transmission.")
         else : 
@@ -54,8 +54,9 @@ def format_teams(team_a, goleiro_a, team_b, goleiro_b, tempo):
         
     return output
 
-server_address = "127.0.0.1"
-# server_address = str(input("Enter the server address:"))
+
+# server_address = "127.0.0.1"
+server_address = str(input("Enter the server address:"))
 port = 12345
 
 # Inicialização do socket UDP

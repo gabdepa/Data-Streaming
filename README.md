@@ -3,6 +3,7 @@
 ## Project Overview
 
 In this endeavor, we have implemented a robust streaming server demonstrating the ubiquitous application of streaming services in contemporary digital ecosystems such as Netflix, stock exchange platforms, and meteorological forecast streaming.
+
 Project Implementation
 
    - **Stream Nature**: Our team elected to focus on a multimedia stream, encapsulating a sequence of messages, each bearing a distinct type and at least two specific fields. A crucial field is the packet order in the stream, initiating from 1.
@@ -37,13 +38,19 @@ For this project we choosed to use an JSON structure, using the fields:
 - *content* : Payload from the datagram, having the phrase from the event.  
 - *type* : Event type of the message, one of (Foul,Goal, Red card, yellow card)
 
-```
-message= {
-   "count": Integer, 
-   "score": String,
-   "content": String, 
-   "type": Integer
-} 
+``` 
+{
+   "message": {
+      "count": Integer, 
+      "score": String,
+      "content": String, 
+      "type": Integer
+   }, 
+   "timeA": Array, 
+   "timeB": Array, 
+   "goleiroA": Goleiro, 
+   "goleiroB": Goleiro 
+}
 ``` 
 
 ## Project Broacast
@@ -51,3 +58,13 @@ Multiple clients can connect to the simulated game transmission, such as that in
 
 
 ![Project execution flow](twoclients.png)
+
+
+<a href="./client.py.txt">Função cliente</a>
+
+<a href="./server.py.txt">Função Server</a>
+
+<a href="./client.py.txt">Log Servidor</a>
+
+<a href="./client_stats.log">Arquivo exemplo estatística Cliente </a>
+
