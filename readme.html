@@ -11,11 +11,11 @@
 <p><strong>Client-Server Interaction</strong>: Multiple clients can register with the server to receive the stream, facilitated through UDP/IP. Upon termination, each client generates statistics on UDP usage, including packet loss and out-of-order packet arrival.</p>
 </li>
 </ul>
-<p><img src="statistics.png" alt="Statistics"></p>
+<p><img style="width: 100%;" src="statistics.png" alt="Statistics"></p>
 <ul>
 <li>
 <p><strong>Data Operation</strong>: Each client implements an operation on the received data. In our scenario, it´s showed to the client the game event phrase and the score after the event such as showed below, and the teams lineups such as that if a played received a red card it´s showed (red card) after his name, and if he scores n goals, it is showed n '*' after his name, being the lineups updated in stream real time.<br>
-<img src="execucao_3_clientes.png" alt="Execucao 3 clientes"></p>
+<img style="width: 100%;" src="execucao_3_clientes.png" alt="Execucao 3 clientes"></p>
 </li>
 <li>
 <p><strong>Execution Logs</strong>: Logs for multiple executions have been documented, with one mandatory execution involving three clients receiving the stream, such as the example above. Below is the example log file generated for the execution above. When the client receives an end of transmission message or an CTL+C, it stores the statistics log, on the client_stats log file. In the file client_log, the client prints out the core events from the transmission such as the received messages and that it registered in server.
@@ -43,7 +43,7 @@ We use 3 files to store the logs, click on the log file to see for the 3 clients
 (server) Number of clients registered: 1
 </code></pre>
 <p>Server flow during trasmition and end of game
-<img src="server_log_file.png" alt="Server log"></p>
+<img style="width: 100%;" src="server_log_file.png" alt="Server log"></p>
 </blockquote>
 <h2>Code Structure</h2>
 <ul>
