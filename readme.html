@@ -1,75 +1,114 @@
-<h1>Data-Streaming Service</h1>
-<h2>Project Overview</h2>
-<ul>
-<li>
-<p><strong>Stream Nature</strong>: Our team elected to focus on a soccer stream, based on soccer notifications app, such as the one in Google, our server streams an simulated soccer game for the clients registered in the stream.</p>
-</li>
-<li>
-<p><strong>Command Line Configuration</strong>: A feature enabling the configuration of the time interval for message transmission in the stream via command line has been successfully integrated. We configured the server IP, such that we could test the program in more than one machine, using the department network.</p>
-</li>
-<li>
-<p><strong>Client-Server Interaction</strong>: Multiple clients can register with the server to receive the stream, facilitated through UDP/IP. Upon termination, each client generates statistics on UDP usage, including packet loss and out-of-order packet arrival.</p>
-</li>
-</ul>
-<p><img style="width: 100%;" src="statistics.png" alt="Statistics"></p>
-<ul>
-<li>
-<p><strong>Data Operation</strong>: Each client implements an operation on the received data. In our scenario, it´s showed to the client the game event phrase and the score after the event such as showed below, and the teams lineups such as that if a played received a red card it´s showed (red card) after his name, and if he scores n goals, it is showed n '*' after his name, being the lineups updated in stream real time.<br>
-<img style="width: 100%;" src="execucao_3_clientes.png" alt="Execucao 3 clientes"></p>
-</li>
-<li>
-<p><strong>Execution Logs</strong>: Logs for multiple executions have been documented, with one mandatory execution involving three clients receiving the stream, such as the example above. Below is the example log file generated for the execution above. When the client receives an end of transmission message or an CTL+C, it stores the statistics log, on the client_stats log file. In the file client_log, the client prints out the core events from the transmission such as the received messages and that it registered in server.
-We use 3 files to store the logs, click on the log file to see for the 3 clients example:</p>
-</li>
-</ul>
-<p><a target="_blank" href="./client.log">Client log</a></p>
-<p><a target="_blank" href="./client_stats.log">Client Statistics log</a> </p>
-<p><a target="_blank" href="./server.log">Server log</a> 
-<blockquote>
-<p>Client statistics Log structure.</p>
-<pre><code>(client) Received end of transmission.&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; STATISTICS &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="description" content="Trabalho Redes II">
+   <meta name="author" content="Gabriel Razzolini Pires De Paula & Rubens Zandomenighi Laszlo">
+   <title>Soccer Streaming</title>
+</head>
+
+<body>
+   <h1>Data-Streaming Service: Soccer Game</h1>
+   <h2>Project Overview</h2>
+   <ul>
+      <li>
+         <p><strong>Stream Nature</strong>: Our team elected to focus on a soccer stream, based on soccer notifications
+            app, such as the one in Google, our server streams a simulated soccer game for the clients registered in the
+            stream.</p>
+      </li>
+      <li>
+         <p><strong>Command Line Configuration</strong>: A feature enabling the configuration of the time interval for
+            message transmission in the stream via command line has been successfully integrated. We configured the
+            server
+            IP, such that we could test the program in more than one machine, using the department network.</p>
+      </li>
+      <li>
+         <p><strong>Client-Server Interaction</strong>: Multiple clients can register with the server to receive the
+            stream, facilitated through UDP/IP. Upon termination, each client generates statistics on UDP usage,
+            including
+            packet loss and out-of-order packet arrival.</p>
+      </li>
+   </ul>
+   <ul>
+      <li>
+         <p><strong>Data Operation</strong>: Each client implements an operation on the received data. In our scenario,
+            it´s showed to the client the game event phrase and the score after the event such as showed below, and the
+            teams lineups such as that if a played received a red card it´s showed (red card) after his name, and if he
+            scores n goals, it is showed n '*' after his name, being the lineups updated in stream real time.<br>
+            <img style="width: 100%;" src="execucao_3_clientes.png" alt="Execucao 3 clientes">
+         </p>
+      </li>
+      <li>
+         <p><strong>Execution Logs</strong>: Logs for multiple executions have been documented, with one mandatory
+            execution involving three clients receiving the stream, such as the example above. Below is the example log
+            file generated for the execution above. When the client receives an end of transmission message or an CTL+C,
+            it
+            stores the statistics log, on the client_stats log file. In the file client_log, the client prints out the
+            core
+            events from the transmission such as the received messages and that it registered in server.
+            We use 3 files to store the logs, click on the log file to see for the 3 clients example:</p>
+      </li>
+   </ul>
+   <p><a target="_blank" href="./client.log.txt">Client log</a></p>
+   <p><a target="_blank" href="./client_stats.log.txt">Client Statistics log</a> </p>
+   <p><a target="_blank" href="./server.log.txt">Server log</a>
+   <blockquote>
+      <p>Client statistics Log structure.</p>
+      <pre><code>(client) Received end of transmission.&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; STATISTICS &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; 
 (client) Number of packets received: 50 
 (client) Number of lost packets: 0 
 (client) Number of packets out of order: 0
 </code></pre>
-</blockquote>
-<blockquote>
-<p>Server initial log structure</p>
-<pre><code>(server) Server started on port 12345. 
+   </blockquote>
+   <blockquote>
+      <p>Server initial log structure</p>
+      <pre><code>(server) Server started on port 12345. 
 (server) Server name: j1
 (server) Server ip: 10.254.225.5
 (server) Received b'register' of address ('127.0.0.1', 59791) on socket
 (server) Registering client ('127.0.0.1', 59791). 
 (server) Number of clients registered: 1
 </code></pre>
-<p>Server flow during trasmition and end of game
-<img style="width: 100%;" src="server_log_file.png" alt="Server log"></p>
-</blockquote>
-<h2>Code Structure</h2>
-<ul>
-<li>
-<p><strong>server.py</strong>: This file encapsulates the core functionality of the streaming server, handling client registrations, message streaming, and ensuring the seamless transmission of packets to registered clients.</p>
-</li>
-<li>
-<p><strong>client.py</strong>: This script represents the client-side logic, handling server communication, data reception, operation implementation on the received data, and generating UDP usage statistics upon client termination.</p>
-</li>
-<li>
-<p><strong>simulate_game.py</strong>: Simulate an soccer game using random choices lib, based on soccer Apps notifications, we use the random lib to choose between the possible events from the game, using random soccers phrases based on the event.</p>
-</li>
-</ul>
-<h2>Datagram Structure</h2>
-<p>For this project we choosed to use an JSON structure, using the fields:</p>
-<ul>
-<li><em>count</em>: Show the message sequence, used to the statistics for the client, such that the first count from a messsage that a client receives is his initial message for the missed datagram count.</li>
-<li><em>score</em> : Game score, since it is updated acording to the passed events.</li>
-<li><em>content</em> : Payload from the datagram, having the phrase from the event.</li>
-<li><em>type</em> : Event type of the message, one of (Foul,Goal, Red card, yellow card)</li>
-<li><em>timeA</em> : Home team.</li>
-<li><em>timeB</em>: Guest team.</li>
-<li><em>goleiroA</em> : Goalkeeper from team A.</li>
-<li><em>goleiroB</em> : Goalkeeper from team B.</li>
-</ul>
-<pre><code>{
+      <p>Server flow during trasmition and end of game
+         <img style="width: 100%;" src="server_log_file.png" alt="Server log">
+      </p>
+   </blockquote>
+   <h2>Code Structure</h2>
+   <ul>
+      <li>
+         <p><strong>server.py</strong>: This file encapsulates the core functionality of the streaming server, handling
+            client registrations, message streaming, and ensuring the seamless transmission of packets to registered
+            clients.</p>
+      </li>
+      <li>
+         <p><strong>client.py</strong>: This script represents the client-side logic, handling server communication,
+            data
+            reception, operation implementation on the received data, and generating UDP usage statistics upon client
+            termination.</p>
+      </li>
+      <li>
+         <p><strong>simulate_game.py</strong>: Simulate an soccer game using random choices lib, based on soccer Apps
+            notifications, we use the random lib to choose between the possible events from the game, using random
+            soccers
+            phrases based on the event.</p>
+      </li>
+   </ul>
+   <h2>Datagram Structure</h2>
+   <p>For this project we choosed to use an JSON structure, using the fields:</p>
+   <ul>
+      <li><em>count</em>: Show the message sequence, used to the statistics for the client, such that the first count
+         from
+         a messsage that a client receives is his initial message for the missed datagram count.</li>
+      <li><em>score</em> : Game score, since it is updated acording to the passed events.</li>
+      <li><em>content</em> : Payload from the datagram, having the phrase from the event.</li>
+      <li><em>type</em> : Event type of the message, one of (Foul,Goal, Red card, yellow card)</li>
+      <li><em>timeA</em> : Home team.</li>
+      <li><em>timeB</em>: Guest team.</li>
+      <li><em>goleiroA</em> : Goalkeeper from team A.</li>
+      <li><em>goleiroB</em> : Goalkeeper from team B.</li>
+   </ul>
+   <pre><code>{
    &quot;message&quot;: {
       &quot;count&quot;: Integer, 
       &quot;score&quot;: String,
@@ -82,10 +121,14 @@ We use 3 files to store the logs, click on the log file to see for the 3 clients
    &quot;goleiroB&quot;: Goleiro 
 }
 </code></pre>
-<h2>Project Source Codes</h2>
-<p>Below are the source codes used in this program, your can click on the below links to see the files on your browser, or available on Github at the link: 
-   <a target="_blank" href="https://github.com/gabdepa/Data-Streaming">GitHub Project link</a> <br>
-   <a target="_blank" href="./client.py.txt">Client source code</a><br>
-   <a target="_blank" href="./server.py.txt">Server source code</a><br>
-   <a target="_blank" href="./simulate_game.py.txt">Simulate soccer game source code</a><br>
+   <h2>Project Source Codes</h2>
+   <p>Below are the source codes used in this program, your can click on the below links to see the files on your
+      browser,
+      or available on Github at the link:
+      <a target="_blank" href="https://github.com/gabdepa/Data-Streaming">GitHub Project link</a> <br>
+      <a target="_blank" href="./client.py.txt">Client source code</a><br>
+      <a target="_blank" href="./server.py.txt">Server source code</a><br>
+      <a target="_blank" href="./simulate_game.py.txt">Simulate soccer game source code</a><br>
+</body>
 
+</html>
